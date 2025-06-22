@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 /// Represents a book category or genre
 /// Demonstrates a many-to-many relationship with Book
 /// </summary>
-public class Category : BaseEntity<Guid>
+public class Category : BaseEntity<int>
 {
     /// <summary>
     /// The name of the category

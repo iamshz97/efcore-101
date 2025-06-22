@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using EFCore101.API.Configurations;
 using System.Reflection;
+using EFCore101.API.Extensions;
+using EFCore101.API.Seeds;
 
 public class EFCore101DbContext : DbContext, IEFCore101DbContext
 {
@@ -18,10 +20,11 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.ApplyGlobalFilters<ISoftDeleteEntity>(e => !e.IsDeleted);
+
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
+        modelBuilder.SeedCategories();
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
