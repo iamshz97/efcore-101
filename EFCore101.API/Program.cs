@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using EFCore101.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddOpenApi();
 builder.AddNpgsqlDbContext<EFCore101DbContext>(connectionName: "postgresdb");
 
 builder.Services.AddScoped<IEFCore101DbContext, EFCore101DbContext>();
+
+builder.Services.AddEndpoints(typeof(Program).Assembly);
 
 var app = builder.Build();
 
@@ -36,52 +39,8 @@ if (app.Environment.IsDevelopment())
     }
 }
 
+app.MapEndpoints();
+
 app.UseHttpsRedirection();
 
-app.MapPost("/books", async (IEFCore101DbContext context, BookRequest request, CancellationToken cancellationToken) =>
-{
-    var book = new Book
-    {
-        Title = request.Title,
-        Description = request.Description,
-        ImageUrl = request.ImageUrl
-    };
-
-    await context.Books.AddAsync(book, cancellationToken);
-
-    await context.SaveChangesAsync(cancellationToken);
-
-    return Results.Created($"/books/{book.Id}", book);
-});
-
-app.MapGet("/books", async (IEFCore101DbContext context, CancellationToken cancellationToken) =>
-{
-    var books = await context.Books.ToListAsync(cancellationToken);
-    return Results.Ok(books);
-});
-
-app.MapGet("/books/{id}", async (IEFCore101DbContext context, Guid id, CancellationToken cancellationToken) =>
-{
-    var book = await context.Books.FindAsync(id, cancellationToken);
-    return Results.Ok(book);
-});
-
-app.MapDelete("/books/{id}", async (IEFCore101DbContext context, Guid id, CancellationToken cancellationToken) =>
-{
-    var book = await context.Books.FindAsync(id, cancellationToken);
-
-    if (book == null)
-    {
-        return Results.NotFound();
-    }
-
-    context.Books.Remove(book);
-
-    await context.SaveChangesAsync(cancellationToken);
-    
-    return Results.NoContent();
-});
-
 app.Run();
-
-public record BookRequest(string Title, string Description, string ImageUrl);
