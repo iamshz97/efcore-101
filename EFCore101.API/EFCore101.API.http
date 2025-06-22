@@ -1,4 +1,5 @@
 @EFCore101.API_HostAddress = http://localhost:5090
+@BookId = 019798b7-acb9-7e0f-b0ed-70f87c92b8b3
 
 ### Books API
 
@@ -225,3 +226,31 @@ Content-Type: application/json
 # Delete book details
 DELETE {{EFCore101.API_HostAddress}}/book-details/3fa85f64-5717-4562-b3fc-2c963f66afa6
 Accept: application/json
+
+###
+
+### Loading Examples API
+
+# Example 1: Eager Loading
+GET {{EFCore101.API_HostAddress}}/loading-examples/eager-loading
+Accept: application/json
+
+###
+
+# Example 2: Lazy Loading
+GET {{EFCore101.API_HostAddress}}/loading-examples/lazy-loading
+Accept: application/json
+
+###
+
+# Example 3: Explicit Loading (replace with a valid book ID)
+GET {{EFCore101.API_HostAddress}}/loading-examples/explicit-loading/{{BookId}}
+Accept: application/json
+
+###
+
+# Example 4: Projection with Select
+GET {{EFCore101.API_HostAddress}}/loading-examples/projection
+Accept: application/json
+
+###

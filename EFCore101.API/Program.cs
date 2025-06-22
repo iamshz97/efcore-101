@@ -13,7 +13,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddOpenApi();
 
-builder.AddNpgsqlDbContext<EFCore101DbContext>(connectionName: "postgresdb");
+builder.AddNpgsqlDbContext<EFCore101DbContext>(connectionName: "postgresdb", configureDbContextOptions: options => options.UseLazyLoadingProxies());
 
 builder.Services.AddScoped<IEFCore101DbContext, EFCore101DbContext>();
 
@@ -21,7 +21,6 @@ builder.Services.AddEndpoints(typeof(Program).Assembly);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
