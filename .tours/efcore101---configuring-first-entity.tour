@@ -1,0 +1,21 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "EFCore101 - Configuring first entity",
+  "steps": [
+    {
+      "file": "EFCore101.API/entities/Book.cs",
+      "description": "Approach #1 - Configure entities properties using Data Annotations - Data annotations are attributes applied directly to entity classes and properties to configure EF Core behavior. They're embedded within your domain models and provide a declarative way to specify database mapping rules. These attributes are included in the System.ComponentModel.DataAnnotations and System.ComponentModel.DataAnnotations.Schema namespaces.",
+      "line": 8
+    },
+    {
+      "file": "EFCore101.API/Configuration/BookConfiguration.cs",
+      "description": "Approach #2 - Fluent API is a way to configure your entity models using code rather than attributes. It provides a more flexible and powerful way to define your data models in the OnModelCreating method of your DbContext. This approach allows you to override the OnModelCreating method on your context to further configure the model that was discovered by convention.",
+      "line": 14
+    },
+    {
+      "file": "EFCore101.API/context/EFCore101DbContext.cs",
+      "description": "modelBuilder.ApplyConfiguration(new BookConfiguration()) explicitly applies a single configuration class for the Book entity. This requires manually adding a new line each time you create a configuration for a new entity.\r\n\r\nAlso, incase you create many model configurations and it becomes crowded here you could use\r\n\r\nmodelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()) automatically discovers and applies all entity configurations in the current assembly. This approach is more maintainable as you add new entities because it eliminates the need to manually register each configuration class - they're discovered automatically through reflection.",
+      "line": 14
+    }
+  ]
+}

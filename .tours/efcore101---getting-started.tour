@@ -37,5 +37,6 @@
       "description": "This code defines a Book entity which represents a table in our database. It inherits from BaseEntity<Guid>, meaning it automatically gets an Id property of type Guid (a unique identifier) along with CreatedAt and UpdatedAt timestamp fields for tracking when records are created or modified. The class adds three custom properties specific to books: Title, Description, and ImageUrl, all marked as required which means they cannot be null when creating a new book record.",
       "line": 1
     }
-  ]
+  ],
+  "isPrimary": true
 }
