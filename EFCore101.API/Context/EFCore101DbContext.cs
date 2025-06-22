@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using EFCore101.API.Extensions;
 
 public class EFCore101DbContext : DbContext, IEFCore101DbContext
 {
@@ -14,7 +15,8 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
     {
         modelBuilder.ApplyConfiguration(new BookConfiguration());
 
-        modelBuilder.Entity<BaseEntity<Guid>>().HasQueryFilter(e => !e.IsDeleted);
+        modelBuilder.ApplyGlobalFilters<ISoftDeleteEntity>(e => !e.IsDeleted);
+
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
