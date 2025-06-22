@@ -21,6 +21,26 @@
       "file": "EFCore101.API/Endpoints/LoadingExamplesEndpoints.cs",
       "description": "# Projection with Select\r\n\r\n```csharp\r\nvar bookDtos = await context.Books\r\n    .AsNoTracking()\r\n    .Select(b => new BookSummaryDto\r\n    {\r\n        Id = b.Id,\r\n        Title = b.Title,\r\n        AuthorName = b.Author != null ? b.Author.Name : \"Unknown\",\r\n        PublisherName = b.Publisher != null ? b.Publisher.Name : \"Unknown\",\r\n        PageCount = b.Details != null ? b.Details.NumberOfPages : 0,\r\n        Categories = b.Categories.Select(c => c.Name).ToList()\r\n    })\r\n    .ToListAsync(cancellationToken);\r\n```\r\n\r\n**What's happening:**\r\n- We use `.Select()` to pick only the specific properties we need\r\n- We map directly to a DTO (Data Transfer Object) rather than loading full entities\r\n- EF Core optimizes the SQL query to only retrieve the columns we actually need\r\n\r\n**When to use it:**\r\n- When you need only specific fields, not entire entities\r\n- For API responses where you need a specific data shape\r\n- For the best read performance\r\n\r\n**Pros:** Most efficient for read operations, minimal memory usage\r\n**Cons:** Cannot modify and save the entities (read-only)\r\n\r\n## How Lazy Loading is Configured\r\n\r\nIn our Program.cs file:\r\n\r\n```csharp\r\nbuilder.AddNpgsqlDbContext<EFCore101DbContext>(\r\n    connectionName: \"postgresdb\", \r\n    configureDbContextOptions: options => options.UseLazyLoadingProxies());\r\n```\r\n\r\nThis tells Entity Framework Core to:\r\n1. Create a DbContext using the PostgreSQL provider\r\n2. Enable lazy loading using the proxies approach\r\n3. Use the connection string named \"postgresdb\" from configuration\r\n\r\nRemember that for lazy loading to work, your navigation properties must be marked as `virtual`.",
       "line": 101
+    },
+    {
+      "file": "EFCore101.API/Endpoints/ClientServerEvaluationEndpoints.cs",
+      "description": "# Understanding Client vs Server Evaluation in Entity Framework Core\r\n\r\nIn Entity Framework Core, queries can be executed in two places:\r\n- **Server Evaluation:** Query runs entirely on the database server (SQL)\r\n- **Client Evaluation:** Query runs partially or fully in your application's memory (C#)",
+      "line": 10
+    },
+    {
+      "file": "EFCore101.API/Endpoints/ClientServerEvaluationEndpoints.cs",
+      "description": "## Server Evaluation (Preferred)\r\n\r\nServer evaluation translates your LINQ query into SQL and executes it entirely on the database server.\r\n\r\n```csharp\r\n// Server Evaluation Example - Runs entirely as SQL\r\nvar books = await context.Books\r\n    .Where(b => b.Title.Contains(\"Entity Framework\"))\r\n    .OrderBy(b => b.Title)\r\n    .ToListAsync();\r\n```\r\n\r\n**Benefits:**\r\n- Efficient database queries\r\n- Uses database indexes\r\n- Minimizes data transfer\r\n- Handles large datasets well",
+      "line": 17
+    },
+    {
+      "file": "EFCore101.API/Endpoints/ClientServerEvaluationEndpoints.cs",
+      "description": "## Client Evaluation (Use Cautiously)\r\n\r\nClient evaluation happens when EF Core can't translate parts of your query to SQL.\r\n\r\n```csharp\r\n// Client Evaluation Example - Loads ALL books then filters in memory\r\nvar books = await context.Books.ToListAsync();\r\nvar filteredBooks = books\r\n    .Where(b => b.Title.IndexOf(\"entity\", StringComparison.OrdinalIgnoreCase) >= 0)\r\n    .OrderBy(b => b.Title)\r\n    .ToList();\r\n```\r\n\r\n**Drawbacks:**\r\n- Loads unnecessary data\r\n- Poor performance on large datasets\r\n- Bypasses database indexes\r\n- Higher memory usage",
+      "line": 36
+    },
+    {
+      "file": "EFCore101.API/Endpoints/ClientServerEvaluationEndpoints.cs",
+      "description": "## EF.Functions for Better SQL Translation\r\n\r\nEF.Functions provides database-specific functions that translate well to SQL.\r\n\r\n```csharp\r\n// EF.Functions Example - Optimized SQL translation\r\nvar books = await context.Books\r\n    .Where(b => EF.Functions.Like(b.Title, \"%Entity%\"))\r\n    .Where(b => EF.Functions.Like(b.Description, \"%Framework%\"))\r\n    .OrderBy(b => b.Title)\r\n    .ToListAsync();\r\n```\r\n\r\n**When to use:**\r\n- For database-specific operations (LIKE, DateDiff, etc.)\r\n- To ensure server evaluation of complex predicates\r\n- To optimize performance-critical queries",
+      "line": 115
     }
   ]
 }

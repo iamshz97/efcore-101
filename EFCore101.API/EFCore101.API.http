@@ -254,3 +254,35 @@ GET {{EFCore101.API_HostAddress}}/loading-examples/projection
 Accept: application/json
 
 ###
+
+### Client vs Server Evaluation Examples
+
+# Example 1: Server Evaluation
+GET {{EFCore101.API_HostAddress}}/evaluation-examples/server-evaluation
+Accept: application/json
+
+###
+
+# Example 2: Client Evaluation
+GET {{EFCore101.API_HostAddress}}/evaluation-examples/client-evaluation
+Accept: application/json
+
+###
+
+# Example 3: Mixed Evaluation
+GET {{EFCore101.API_HostAddress}}/evaluation-examples/mixed-evaluation
+Accept: application/json
+
+###
+
+# Example 4: Explicit Client Evaluation
+GET {{EFCore101.API_HostAddress}}/evaluation-examples/explicit-client-evaluation
+Accept: application/json
+
+###
+
+# Example 5: EF.Functions for Server Evaluation
+GET {{EFCore101.API_HostAddress}}/evaluation-examples/ef-functions
+Accept: application/json
+
+###
