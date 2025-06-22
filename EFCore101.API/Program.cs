@@ -38,28 +38,36 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapPost("/books", async (IEFCore101DbContext context, BookRequest request, CancellationToken cancellationToken) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    var book = new Book
+    {
+        Title = request.Title,
+        Description = request.Description,
+        ImageUrl = request.ImageUrl,
+        CreatedAt = DateTime.UtcNow,
+        UpdatedAt = DateTime.UtcNow
+    };
 
-app.MapGet("/weatherforecast", () =>
+    await context.Books.AddAsync(book, cancellationToken);
+
+    await context.SaveChangesAsync(cancellationToken);
+
+    return Results.Created($"/books/{book.Id}", book);
+});
+
+app.MapGet("/books", async (IEFCore101DbContext context, CancellationToken cancellationToken) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    var books = await context.Books.ToListAsync(cancellationToken);
+    return Results.Ok(books);
+});
+
+app.MapGet("/books/{id}", async (IEFCore101DbContext context, Guid id, CancellationToken cancellationToken) =>
+{
+    var book = await context.Books.FindAsync(id, cancellationToken);
+    return Results.Ok(book);
+});
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+public record BookRequest(string Title, string Description, string ImageUrl);
