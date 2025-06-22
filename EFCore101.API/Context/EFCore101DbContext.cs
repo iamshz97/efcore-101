@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-public class EFCore101DbContext : DbContext
+public class EFCore101DbContext : DbContext, IEFCore101DbContext
 {
     public DbSet<Book> Books { get; set; } = null!;
 
