@@ -66,6 +66,22 @@ app.MapGet("/books/{id}", async (IEFCore101DbContext context, Guid id, Cancellat
     return Results.Ok(book);
 });
 
+app.MapDelete("/books/{id}", async (IEFCore101DbContext context, Guid id, CancellationToken cancellationToken) =>
+{
+    var book = await context.Books.FindAsync(id, cancellationToken);
+
+    if (book == null)
+    {
+        return Results.NotFound();
+    }
+
+    context.Books.Remove(book);
+
+    await context.SaveChangesAsync(cancellationToken);
+    
+    return Results.NoContent();
+});
+
 app.Run();
 
 public record BookRequest(string Title, string Description, string ImageUrl);
