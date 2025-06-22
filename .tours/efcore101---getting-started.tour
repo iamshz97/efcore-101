@@ -1,0 +1,41 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "EFCore101 - Getting Started",
+  "steps": [
+    {
+      "file": "EFCore101.API/EFCore101.API.csproj",
+      "description": "The Aspire.Npgsql.EntityFrameworkCore.PostgreSQL package is an enhanced version of the standard PostgreSQL Entity Framework Core provider that's specifically designed for .NET Aspire applications. It builds upon the traditional Npgsql.EntityFrameworkCore.PostgreSQL package while adding significant cloud-native capabilities and integrations. If you are setting up a non-aspire project you need to install Microsoft.EntityFrameworkCore and Npgsql.EntityFrameworkCore.PostgreSQL packages separately, then manually configure your DbContext with connection strings, register it in dependency injection, and set up health checks, logging, and telemetry yourself. In contrast, with Aspire, you simply use builder.AddNpgsqlDbContext<MyDbContext>(\"postgresdb\") which automatically handles all the connection management, health monitoring, observability, retry policies, and dependency injection configuration that would otherwise require extensive manual setup in traditional projects.",
+      "line": 10
+    },
+    {
+      "file": "EFCore101.API/EFCore101.API.csproj",
+      "description": "Microsoft.EntityFrameworkCore.Design is a package that provides design-time tools for Entity Framework Core. It enables:\r\nMigrations commands (add, remove, update)\r\nScaffolding of DbContext and entity classes from existing databases\r\nCommand-line interface for EF Core tools (dotnet ef)\r\nIt's typically added as a development dependency with PrivateAssets=\"all\" so it doesn't get deployed to production. This package is essential when you need to create or manage database migrations in your EF Core project.",
+      "line": 12
+    },
+    {
+      "file": "EFCore101.API/context/EFCore101DbContext.cs",
+      "description": "This code defines a database context class EFCore101DbContext that inherits from Entity Framework Core's DbContext. It contains a constructor that accepts DbContextOptions<EFCore101DbContext> and passes these options to the base class constructor. This class serves as the primary point of interaction with the database in an EF Core application",
+      "line": 5
+    },
+    {
+      "file": "EFCore101.API/Program.cs",
+      "description": "This code configures Entity Framework Core to use a PostgreSQL database in an ASP.NET Core application. It registers the EFCore101DbContext with the dependency injection container and connects it to a PostgreSQL database using the connection string identified by \"postgresdb\". The AddNpgsqlDbContext extension method is provided by Aspire's PostgreSQL integration, which handles the setup of the database connection, including connection pooling, resilience policies, and telemetry. This single line replaces manual configuration of database connection strings and DbContext registration.",
+      "line": 14
+    },
+    {
+      "file": "EFCore101.API/context/EFCore101DbContext.cs",
+      "description": "This code declares a DbSet<Book> property named Books within the EFCore101DbContext class. In Entity Framework Core, a DbSet represents a collection of entities in the database - in this case, a table of Book records. By adding this property to the DbContext, you're telling EF Core that Books should be included in the database model. The = null! assignment is a null-forgiving operator that tells the compiler not to worry about null warnings, as EF Core will initialize this property at runtime. When you perform operations like context.Books.Add(newBook) or context.Books.ToList(), you're interacting with this collection, which EF Core maps to SQL operations on the underlying database table.",
+      "line": 5
+    },
+    {
+      "file": "EFCore101.API/Entities/Base/BaseEntity.cs",
+      "description": "This code defines a generic base entity structure for database models. BaseEntity<T> is a class that implements the IBaseEntity<T> interface, where T represents the type of the primary key (could be int, Guid, string, etc.). Both contain three properties: Id (the primary key with a flexible type), CreatedAt (timestamp for when the entity was created), and UpdatedAt (timestamp for when the entity was last modified). This pattern provides a consistent foundation for all domain entities in the application, ensuring they share common tracking fields while allowing for different primary key types.",
+      "line": 1
+    },
+    {
+      "file": "EFCore101.API/entities/Book.cs",
+      "description": "This code defines a Book entity which represents a table in our database. It inherits from BaseEntity<Guid>, meaning it automatically gets an Id property of type Guid (a unique identifier) along with CreatedAt and UpdatedAt timestamp fields for tracking when records are created or modified. The class adds three custom properties specific to books: Title, Description, and ImageUrl, all marked as required which means they cannot be null when creating a new book record.",
+      "line": 1
+    }
+  ]
+}
