@@ -8,6 +8,11 @@
       "line": 20
     },
     {
+      "file": "EFCore101.API/context/EFCore101DbContext.cs",
+      "description": "Global query filters in Entity Framework Core automatically apply predefined conditions to all queries for specific entity types. The line modelBuilder.Entity<BaseEntity<Guid>>().HasQueryFilter(e => !e.IsDeleted) creates a filter that excludes any entity marked as deleted (where IsDeleted = true) from all queries.\r\n\r\nThis means when you write context.Books.ToList(), you'll only get non-deleted books without explicitly adding a where clause. The filter applies across your entire application, ensuring consistency.\r\n\r\n**Other common examples include:**\r\n\r\n- Multi-tenancy: modelBuilder.Entity<TenantEntity>().HasQueryFilter(e => e.TenantId == currentTenantId)\r\n\r\n- User-specific data: modelBuilder.Entity<UserData>().HasQueryFilter(e => e.UserId == currentUserId)\r\n\r\n- Active records: modelBuilder.Entity<Subscription>().HasQueryFilter(e => e.ExpiryDate > DateTime.UtcNow)\r\n\r\n- These filters can be temporarily bypassed when needed using .IgnoreQueryFilters() in specific queries.",
+      "line": 17
+    },
+    {
       "file": "EFCore101.API/Entities/Base/BaseEntity.cs",
       "description": "The public bool IsDeleted { get; set; } property implements \"soft delete\" functionality in your entity. Rather than permanently removing records from the database when deleted, this flag marks them as \"deleted\" while keeping the data intact. When set to true, the application treats the record as if it doesn't exist in normal queries, but the data remains in the database for historical purposes, audit trails, or potential recovery. This approach is valuable for maintaining data integrity, supporting data recovery, and tracking deletion history. It's commonly used in business applications where completely removing data could cause problems with referential integrity or compliance requirements.",
       "line": 6
