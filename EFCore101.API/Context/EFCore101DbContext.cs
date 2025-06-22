@@ -17,11 +17,11 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var addedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Added);
+        var addedEntries = ChangeTracker.Entries<IAuditableEntity>().Where(e => e.State == EntityState.Added);
 
-        var modifiedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Modified);
+        var modifiedEntries = ChangeTracker.Entries<IAuditableEntity>().Where(e => e.State == EntityState.Modified);
 
-        var deletedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Deleted);
+        var deletedEntries = ChangeTracker.Entries<ISoftDeleteEntity>().Where(e => e.State == EntityState.Deleted);
 
         foreach (var entry in addedEntries)
         {
@@ -41,7 +41,7 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    public void HandleCreateAuditFields(EntityEntry<BaseEntity<Guid>> entity)
+    public void HandleCreateAuditFields(EntityEntry<IAuditableEntity> entity)
     {
         if (entity.State == EntityState.Added)
         {
@@ -49,7 +49,7 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
         }
     }
 
-    public void HandleUpdateAuditFields(EntityEntry<BaseEntity<Guid>> entity)
+    public void HandleUpdateAuditFields(EntityEntry<IAuditableEntity> entity)
     {
         if (entity.State == EntityState.Modified)
         {
@@ -57,7 +57,7 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
         }
     }
 
-    public void HandleDeleteAuditFields(EntityEntry<BaseEntity<Guid>> entity)
+    public void HandleDeleteAuditFields(EntityEntry<ISoftDeleteEntity> entity)
     {
         if (entity.State == EntityState.Deleted)
         {

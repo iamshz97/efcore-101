@@ -1,4 +1,4 @@
-public class BaseEntity<T> : IBaseEntity<T>
+public class BaseEntity<T> : IBaseEntity<T>, IAuditableEntity, ISoftDeleteEntity
 {
     public T Id { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -12,4 +12,15 @@ public interface IBaseEntity<T>
     DateTime CreatedAt { get; set; }
     DateTime UpdatedAt { get; set; }
     bool IsDeleted { get; set; }
+}
+
+public interface IAuditableEntity
+{
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+}
+
+public interface ISoftDeleteEntity
+{
+    public bool IsDeleted { get; set; }
 }
