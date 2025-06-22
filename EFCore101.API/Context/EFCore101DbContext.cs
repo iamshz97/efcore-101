@@ -1,10 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using EFCore101.API.Extensions;
+using EFCore101.API.Configurations;
+using System.Reflection;
 
 public class EFCore101DbContext : DbContext, IEFCore101DbContext
 {
     public DbSet<Book> Books { get; set; } = null!;
+    public DbSet<Author> Authors { get; set; } = null!;
+    public DbSet<Publisher> Publishers { get; set; } = null!;
+    public DbSet<BookDetails> BookDetails { get; set; } = null!;
+    public DbSet<Category> Categories { get; set; } = null!;
 
     public EFCore101DbContext(DbContextOptions<EFCore101DbContext> options)
         : base(options)
@@ -13,9 +18,9 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new BookConfiguration());
 
         modelBuilder.ApplyGlobalFilters<ISoftDeleteEntity>(e => !e.IsDeleted);
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
     }
 
