@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddOpenApi();
 
 builder.AddNpgsqlDbContext<EFCore101DbContext>(connectionName: "postgresdb");
 
+builder.Services.AddScoped<IEFCore101DbContext, EFCore101DbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +27,13 @@ if (app.Environment.IsDevelopment())
     .WithTitle("EF Core 101 API")
     .WithTheme(ScalarTheme.Saturn)
     .WithDarkMode());
+
+    // Run Auto migration
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<EFCore101DbContext>();
+        await dbContext.Database.MigrateAsync();
+    }
 }
 
 app.UseHttpsRedirection();
