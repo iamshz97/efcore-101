@@ -1,6 +1,10 @@
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+
+builder.Services.AddOpenApi();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -12,6 +16,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    app.MapScalarApiReference(options => options
+    .WithTitle("EF Core 101 API")
+    .WithTheme(ScalarTheme.Saturn)
+    .WithDarkMode());
 }
 
 app.UseHttpsRedirection();
