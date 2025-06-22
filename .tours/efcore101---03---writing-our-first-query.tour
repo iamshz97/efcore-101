@@ -1,5 +1,21 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
   "title": "EFCore101 - 03 - Writing our first query",
-  "steps": []
+  "steps": [
+    {
+      "file": "EFCore101.API/Context/IEFCore101DbContext.cs",
+      "description": "Creating an interface for your DbContext (IEFCore101DbContext) provides several important benefits:\r\n\r\nDependency Inversion: It follows the Dependency Inversion Principle by allowing higher-level modules to depend on abstractions rather than concrete implementations.\r\n\r\nTestability: Makes unit testing significantly easier by enabling you to mock the database context in tests without hitting the actual database.\r\n\r\nFlexibility: Provides the ability to swap implementations (like using an in-memory database for testing or a different database provider) without changing consumer code.\r\n\r\nContract Definition: Clearly defines what operations are available to consumers, creating a more explicit API contract.\r\n\r\nSeparation of Concerns: Helps separate the data access interface from its implementation, making the codebase more maintainable.",
+      "line": 3
+    },
+    {
+      "file": "EFCore101.API/Program.cs",
+      "description": "This code registers the database context with the ASP.NET Core dependency injection container using a scoped lifetime. It maps the IEFCore101DbContext interface to its concrete implementation EFCore101DbContext.",
+      "line": 17
+    },
+    {
+      "file": "EFCore101.API/Program.cs",
+      "description": "This code defines an HTTP POST endpoint at \"/books\" using ASP.NET Core's minimal API syntax. When a client sends a POST request to this URL, the following happens:\r\n\r\nThe endpoint receives a BookRequest object from the request body and automatically injects the database context (IEFCore101DbContext) and a cancellation token.\r\n\r\nIt creates a new Book entity, mapping properties from the request and setting the creation/update timestamps to the current UTC time.\r\n\r\nThe book is added to the database context asynchronously using AddAsync(), which stages it for insertion.\r\n\r\nSaveChangesAsync() commits the changes to the database, generating an ID for the new book.\r\n\r\nFinally, it returns a 201 Created response with the URL to access the new resource and the created book object in the response body.",
+      "line": 41
+    }
+  ]
 }
