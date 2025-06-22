@@ -17,11 +17,25 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entry in ChangeTracker.Entries<BaseEntity<Guid>>())
+        var addedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Added);
+
+        var modifiedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Modified);
+
+        var deletedEntries = ChangeTracker.Entries<BaseEntity<Guid>>().Where(e => e.State == EntityState.Deleted);
+
+        foreach (var entry in addedEntries)
         {
             HandleCreateAuditFields(entry);
-            
+        }
+
+        foreach (var entry in modifiedEntries)
+        {
             HandleUpdateAuditFields(entry);
+        }
+
+        foreach (var entry in deletedEntries)
+        {
+            HandleDeleteAuditFields(entry);
         }
 
         return base.SaveChangesAsync(cancellationToken);
@@ -40,6 +54,14 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
         if (entity.State == EntityState.Modified)
         {
             entity.Entity.UpdatedAt = DateTime.UtcNow;
+        }
+    }
+
+    public void HandleDeleteAuditFields(EntityEntry<BaseEntity<Guid>> entity)
+    {
+        if (entity.State == EntityState.Deleted)
+        {
+            entity.Entity.IsDeleted = true;
         }
     }
 }

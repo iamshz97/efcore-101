@@ -6,6 +6,11 @@
       "file": "EFCore101.API/context/EFCore101DbContext.cs",
       "description": "This code is part of the database saving process and automatically manages audit fields for all entities. The ChangeTracker keeps track of all entities that have been modified during a database operation. Here, we're looping through each entity in the tracker that inherits from BaseEntity<Guid> and applying two helper methods: one that handles setting creation timestamps for new records, and another that updates the \"last modified\" timestamp for changed records. This is a powerful feature that ensures your audit fields (CreatedAt and UpdatedAt) are always correctly maintained without having to manually set them in every place you create or update entities. It's like having an automatic record-keeper that timestamps all your data changes consistently throughout your application.",
       "line": 20
+    },
+    {
+      "file": "EFCore101.API/Entities/Base/BaseEntity.cs",
+      "description": "The public bool IsDeleted { get; set; } property implements \"soft delete\" functionality in your entity. Rather than permanently removing records from the database when deleted, this flag marks them as \"deleted\" while keeping the data intact. When set to true, the application treats the record as if it doesn't exist in normal queries, but the data remains in the database for historical purposes, audit trails, or potential recovery. This approach is valuable for maintaining data integrity, supporting data recovery, and tracking deletion history. It's commonly used in business applications where completely removing data could cause problems with referential integrity or compliance requirements.",
+      "line": 6
     }
   ]
 }
