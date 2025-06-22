@@ -13,6 +13,8 @@ var postgres = builder.AddPostgres("postgres", username, password)
 var postgresdb = postgres.AddDatabase("postgresdb");
 
 var api = builder.AddProject<EFCore101_API>("api")
+    .WaitFor(postgres)
+    .WaitFor(postgresdb)
     .WithReference(postgresdb)
     .WithExternalHttpEndpoints();
 
