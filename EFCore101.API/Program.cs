@@ -44,9 +44,7 @@ app.MapPost("/books", async (IEFCore101DbContext context, BookRequest request, C
     {
         Title = request.Title,
         Description = request.Description,
-        ImageUrl = request.ImageUrl,
-        CreatedAt = DateTime.UtcNow,
-        UpdatedAt = DateTime.UtcNow
+        ImageUrl = request.ImageUrl
     };
 
     await context.Books.AddAsync(book, cancellationToken);
