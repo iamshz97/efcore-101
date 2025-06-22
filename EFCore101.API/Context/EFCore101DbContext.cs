@@ -13,6 +13,8 @@ public class EFCore101DbContext : DbContext, IEFCore101DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new BookConfiguration());
+
+        modelBuilder.Entity<BaseEntity<Guid>>().HasQueryFilter(e => !e.IsDeleted);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
