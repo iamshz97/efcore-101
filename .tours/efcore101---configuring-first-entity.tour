@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "EFCore101 - Configuring first entity",
+  "title": "EFCore101 - 02 - Configuring first entity",
   "steps": [
     {
       "file": "EFCore101.API/entities/Book.cs",

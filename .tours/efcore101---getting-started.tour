@@ -1,6 +1,6 @@
 {
   "$schema": "https://aka.ms/codetour-schema",
-  "title": "EFCore101 - Getting Started",
+  "title": "EFCore101 - 01 - Getting Started",
   "steps": [
     {
       "file": "EFCore101.API/EFCore101.API.csproj",
