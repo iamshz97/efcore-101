@@ -286,3 +286,35 @@ GET {{EFCore101.API_HostAddress}}/evaluation-examples/ef-functions
 Accept: application/json
 
 ###
+
+### IQueryable vs IEnumerable Examples
+
+# Example 1: IQueryable (deferred execution)
+GET {{EFCore101.API_HostAddress}}/queryable-enumerable/iqueryable
+Accept: application/json
+
+###
+
+# Example 2: IEnumerable (immediate execution)
+GET {{EFCore101.API_HostAddress}}/queryable-enumerable/ienumerable
+Accept: application/json
+
+###
+
+# Example 3: IQueryable vs IEnumerable Comparison
+GET {{EFCore101.API_HostAddress}}/queryable-enumerable/comparison
+Accept: application/json
+
+###
+
+# Example 4: Split Queries for complex includes
+GET {{EFCore101.API_HostAddress}}/queryable-enumerable/split-queries
+Accept: application/json
+
+###
+
+# Example 5: AsSingleQuery vs AsSplitQuery (replace with a valid book ID)
+GET {{EFCore101.API_HostAddress}}/queryable-enumerable/query-types/{{BookId}}
+Accept: application/json
+
+###
